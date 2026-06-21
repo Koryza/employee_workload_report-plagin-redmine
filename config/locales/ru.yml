@@ -1,0 +1,9 @@
+ru:
+  employee_workload_report:
+    title: "Отчет по выработке сотрудников"
+    employee: "Сотрудник"
+    project: "Проект"
+    hours: "Часы"
+    participation: "% участия"
+    export_excel: "Экспорт в Excel"
+    generate: "Сформировать отчет"

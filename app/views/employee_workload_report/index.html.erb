@@ -1,0 +1,76 @@
+<h2>Отчет по выработке сотрудников</h2>
+
+<form method="get">
+  <p>
+    Дата начала:
+    <input type="date" name="from" value="<%= @from %>">
+
+    Дата окончания:
+    <input type="date" name="to" value="<%= @to %>">
+
+    Проект:
+    <select name="project_id">
+      <option value="">Все проекты</option>
+
+      <% @projects.each do |project| %>
+        <option value="<%= project.id %>"
+          <%= 'selected' if @project_id.to_s == project.id.to_s %>>
+          <%= project.name %>
+        </option>
+      <% end %>
+    </select>
+
+    Сотрудник:
+    <select name="user_id">
+      <option value="">Все сотрудники</option>
+
+      <% @users.each do |user| %>
+        <option value="<%= user.id %>"
+          <%= 'selected' if @user_id.to_s == user.id.to_s %>>
+          <%= "#{user.firstname} #{user.lastname}" %>
+        </option>
+      <% end %>
+    </select>
+
+    <input type="submit" value="Сформировать отчет">
+
+    <a href="/employee_workload_report/export?from=<%= @from %>&to=<%= @to %>&project_id=<%= @project_id %>&user_id=<%= @user_id %>">
+      Экспорт в Excel
+    </a>
+  </p>
+</form>
+
+<div style="margin:15px 0;">
+  <strong>Сотрудников:</strong> <%= @employee_count %> |
+  <strong>Проектов:</strong> <%= @project_count %> |
+  <strong>Всего часов:</strong> <%= @total_hours %>
+</div>
+
+<table class="list">
+  <thead>
+    <tr>
+      <th>Сотрудник</th>
+      <th>Проект</th>
+      <th>Часы</th>
+      <th>% участия</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @data.each do |row| %>
+      <% total_user = @user_totals[row.user_id] || 0 %>
+
+      <% percent =
+        total_user > 0 ?
+        ((row.total_hours.to_f / total_user) * 100).round(2) :
+        0 %>
+
+      <tr>
+        <td><%= row.firstname %> <%= row.lastname %></td>
+        <td><%= row.project_name %></td>
+        <td><%= row.total_hours %></td>
+        <td><%= percent %>%</td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
