@@ -32,11 +32,24 @@
       <% end %>
     </select>
 
+Год:
+<select name="year">
+  <% (2024..2030).each do |y| %>
+    <option value="<%= y %>"
+      <%= 'selected' if params[:year].to_s == y.to_s %>>
+      <%= y %>
+    </option>
+  <% end %>
+</select>
+
     <input type="submit" value="Сформировать отчет">
 
     <a href="/employee_workload_report/export?from=<%= @from %>&to=<%= @to %>&project_id=<%= @project_id %>&user_id=<%= @user_id %>">
       Экспорт в Excel
     </a>
+<a href="/employee_workload_report/export_year?year=<%= params[:year] || Date.today.year %>">
+  Годовой Excel-отчет
+</a>
   </p>
 </form>
 
